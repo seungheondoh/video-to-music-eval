@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vtm_eval"
+version = "0.0.1"
+description = "An open-source framework for training music specific large language model"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "vtm_eval Team" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    # Core dependencies
+    "transformers",
+]
+
+[project.urls]
+Homepage = "https://github.com/vtm_eval/vtm_eval"
+Repository = "https://github.com/vtm_eval/vtm_eval.git"
+
+[tool.setuptools]
+packages = ["vtm_eval"]
+package-dir = {"vtm_eval" = "vtm_eval"}

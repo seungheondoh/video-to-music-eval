@@ -1,0 +1,5 @@
+AudioCLIP
+*.egg-info
+cache
+data
+__pycache__
