@@ -13,6 +13,9 @@ import torchvision.transforms as tv
 from transformers import CLIPVisionModelWithProjection, AutoImageProcessor
 from PIL import Image
 
+IMAGE_SIZE = 224
+IMAGE_MEAN = 0.48145466, 0.4578275, 0.40821073
+IMAGE_STD = 0.26862954, 0.26130258, 0.27577711
 
 def load_vision_embedding_model(model_name):
     if model_name == "wav2clip":
@@ -20,10 +23,9 @@ def load_vision_embedding_model(model_name):
         model = CLIPVisionModelWithProjection.from_pretrained(hf_repo)
         processor = AutoImageProcessor.from_pretrained(hf_repo, use_fast=True)
     elif model_name == "audioclip":
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        sys.path.append(os.path.join(current_dir, "AudioCLIP"))
+        sys.path.append("/home/daeyong/gaudio_retrieval_evaluation/audioclip/AudioCLIP")
         from model import AudioCLIP
-        model = AudioCLIP(pretrained="cache/AudioCLIP-Full-Training.pt")
+        model = AudioCLIP(pretrained="/home/daeyong/gaudio_retrieval_evaluation/audioclip/AudioCLIP/assets/AudioCLIP-Full-Training.pt") # AudioCLIP-Full-Training.pt 저장 경로
         processor = tv.transforms.Compose([
             tv.transforms.ToTensor(),
             tv.transforms.Resize(IMAGE_SIZE, interpolation=Image.BICUBIC),
