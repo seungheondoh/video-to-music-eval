@@ -67,7 +67,7 @@ def video_to_music_retrieval(
     ranked_music, similarity_score = retrieval_fn(video_feature, music_features, music_ids)
     real_time_factor_end = time()
     real_time_factor = real_time_factor_end - real_time_factor_start
-    retrieval_results = [{"music_id": mid, "score": score}for mid, score in zip(ranked_music[:top_k], similarity_score[:top_k])]
+    retrieval_results = [{"music_id": mid, "score": score} for mid, score in zip(ranked_music[:top_k], similarity_score[:top_k])]
     result = {
         "video_path": video_path,
         "video_caption": video_caption,
@@ -89,12 +89,12 @@ def main(args):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--video_path", type=str, default="/data/dean/evalset/gaudio/data/clip/StreetFoodFighter_s01e04/video/82bd1fe8-caa8-49e0-b80b-afc11bc8a2c5.mp4")
-    parser.add_argument("--video_captioner", type=str, default="llava-hf/LLaVA-NeXT-Video-7B-hf")
-    parser.add_argument("--text_model", type=str, default="Qwen/Qwen3-Embedding-0.6B")
-    parser.add_argument("--embedding_path", type=str, default="cache/text_embedding/cc_bgm")
-    parser.add_argument("--dataset_path", type=str, default="/data/dean/evalset/gaudio/data/clip")
-    parser.add_argument("--file_name", type=str, default="StreetFoodFighter_s01e04/video/82bd1fe8-caa8-49e0-b80b-afc11bc8a2c5.mp4")
+    # parser.add_argument("--video_path", type=str, default="/data/dean/evalset/gaudio/data/clip/StreetFoodFighter_s01e04/video/82bd1fe8-caa8-49e0-b80b-afc11bc8a2c5.mp4")
+    parser.add_argument("--video_captioner", type=str, default="llava-hf/LLaVA-NeXT-Video-7B-hf") # Done
+    parser.add_argument("--text_model", type=str, default="Qwen/Qwen3-Embedding-0.6B") # Done
+    parser.add_argument("--embedding_path", type=str, default="/home/daeyong/gaudio_retrieval_evaluation/cache/text_embedding/ossl") # Done
+    parser.add_argument("--dataset_path", type=str, default="/home/daeyong/gaudio_retrieval_evaluation/ossl/video")
+    parser.add_argument("--file_name", type=str, default="video_id.mp4")
     parser.add_argument("--device", type=str, default="cuda:0")
     parser.add_argument("--top_k", type=int, default=200)
     args = parser.parse_args()
