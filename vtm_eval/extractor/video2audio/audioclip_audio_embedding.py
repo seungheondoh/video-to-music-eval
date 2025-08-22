@@ -8,17 +8,17 @@ from tqdm import tqdm
 
 def main(args):
     """
-    오디오 파일에서 AudioCLIP 임베딩을 추출하고 저장합니다.
+    Extracts and saves AudioCLIP embeddings from audio files.
     """
-    # AudioCLIP 모듈 경로 추가
+    # Add AudioCLIP module path
     if args.audioclip_module_path not in sys.path:
         sys.path.append(args.audioclip_module_path)
     from model import AudioCLIP
 
-    # --- 설정 ---
+    # --- Setup ---
     device = torch.device("cuda" if torch.cuda.is_available() and args.device == "cuda" else "cpu")
 
-    # --- 모델 로드 ---
+    # --- Load Model ---
     print("Loading AudioCLIP model...")
     if not os.path.exists(args.model_path):
         print(f"Error: Model file not found at {args.model_path}")
@@ -26,18 +26,18 @@ def main(args):
     audio_embedding_model = AudioCLIP(pretrained=args.model_path).to(device).eval()
     print(f"Model loaded on {device}.")
 
-    # --- 임베딩 추출 ---
+    # --- Extract Embeddings ---
     process_audio_files(args.audio_root, audio_embedding_model, device, args.output_path)
 
 def process_audio_files(audio_root, model, device, output_path):
     """
-    지정된 폴더의 오디오 파일들을 처리하여 임베딩을 추출하고 저장합니다.
+    Processes audio files in the specified folder to extract and save embeddings.
     """
     try:
         if not os.path.isdir(audio_root):
             raise FileNotFoundError(f"Audio root directory not found at {audio_root}")
 
-        # 처리할 오디오 파일 목록 가져오기 (mp3, wav, flac 지원)
+        # Get a list of audio files to process (supports .mp3, .wav, .flac)
         supported_extensions = (".mp3", ".wav", ".flac")
         audio_files = sorted([f for f in os.listdir(audio_root) if f.lower().endswith(supported_extensions)])
         
@@ -49,12 +49,12 @@ def process_audio_files(audio_root, model, device, output_path):
         for audio_file in tqdm(audio_files, desc="Extracting AudioCLIP embeddings"):
             audio_path = os.path.join(audio_root, audio_file)
             
-            # 임베딩 추출
+            # Extract embedding
             embedding = get_audioclip_embedding(model, audio_path, device)
             audio_id = os.path.splitext(audio_file)[0]
             embedding_dict[audio_id] = embedding
 
-        # 결과 저장
+        # Save results
         save_embeddings(embedding_dict, output_path)
 
     except FileNotFoundError as e:
@@ -64,7 +64,7 @@ def process_audio_files(audio_root, model, device, output_path):
 
 def save_embeddings(embedding_dict, output_path):
     """
-    추출된 임베딩을 파일에 저장합니다.
+    Saves the extracted embeddings to a file.
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     torch.save(embedding_dict, output_path)
@@ -73,12 +73,12 @@ def save_embeddings(embedding_dict, output_path):
 @torch.no_grad()
 def get_audioclip_embedding(model, audio_path, device):
     """
-    단일 오디오 파일에서 AudioCLIP 임베딩을 추출합니다.
+    Extracts an AudioCLIP embedding from a single audio file.
     """
     try:
         track, _ = librosa.load(audio_path, sr=44100, dtype=np.float32)
         track_tensor = torch.from_numpy(track).unsqueeze(0).to(device)
-        # 모델 추론
+        # Model inference
         ((audio_features, _, _), _), _ = model(audio=track_tensor)
         return audio_features.squeeze(0).cpu()
     except Exception as e:
