@@ -20,3 +20,6 @@
 ```
 python run.py --steps STEPS_TO_EXECUTE
 ```
+### Soft Metric (CLAP embedding similarity)
+- `generate_clap_embedding.py`: Generate CLAP embeddings from audio files
+- `soft_metric.py`: Calculate top k embedding similarity from top K json results (result from `inference.py`)
